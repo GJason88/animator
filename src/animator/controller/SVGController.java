@@ -50,4 +50,12 @@ public class SVGController extends AbstractController {
 
     this.view.generateSVG(a, svg.toString());
   }
+
+  @Override
+  public void setTempo(int t) throws IllegalArgumentException {
+    if (t < 1) {
+      throw new IllegalArgumentException("Tempo must be positive.");
+    }
+    this.tempo = t;
+  }
 }

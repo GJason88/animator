@@ -152,4 +152,14 @@ public class AbstractView extends JFrame implements IView {
     throw new UnsupportedOperationException("Unsupported for SVG View, visual, and Textual Views.");
   }
 
+  @Override
+  public void initializeScrubber(int lastTick) {
+    throw new UnsupportedOperationException("Unsupported for SVG View, visual, and Textual Views.");
+  }
+
+  @Override
+  public void updateScrubber(int currentTick) {
+    // do nothing
+  }
+
 }

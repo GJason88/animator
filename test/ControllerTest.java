@@ -349,4 +349,15 @@ public class ControllerTest {
     assertEquals(1, this.model.getShapes().size());
   }
 
+  @Test
+  public void initializeScrubberTest() {
+    this.featureController.initializeScrubber();
+    assertEquals("65", this.log.toString());
+  }
+
+  @Test
+  public void updateScrubberTest() {
+    this.confirmInputsView.updateScrubber(100);
+    assertEquals("100", this.log.toString());
+  }
 }

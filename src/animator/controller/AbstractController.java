@@ -56,7 +56,7 @@ public class AbstractController implements IController {
 
   @Override
   public void setTempo(int t) throws UnsupportedOperationException {
-    throw new UnsupportedOperationException("Not supported for text or SVG views");
+    throw new UnsupportedOperationException("Not supported for text views");
 
   }
 

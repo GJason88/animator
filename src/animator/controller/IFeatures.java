@@ -122,4 +122,16 @@ public interface IFeatures {
    */
   void removeShape(String name);
 
+  /**
+   * Initializes the scrubber for EditorViews by sending the view the last tick of the animation to
+   * use as the maximum value of the scrubber.
+   */
+  void initializeScrubber();
+
+  /**
+   * Updates the tick of the animation based off the value of the EditorView's scrubber.
+   *
+   * @param scrubberTick the value of the scrubber in the editor view
+   */
+  void updateTick(int scrubberTick);
 }

@@ -28,7 +28,7 @@ public class Excellence {
    */
   public static void main(String[] args) throws IOException {
 
-    int tempo = 1;
+    int tempo = 15;
     String inputFile = "";
     Appendable outputFile = System.out;
     String viewType = "";

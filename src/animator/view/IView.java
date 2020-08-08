@@ -121,6 +121,19 @@ public interface IView {
    */
   void updateKeyframeEditorGUI(int x, int y, int r, int g, int b, int height, int width);
 
+  /**
+   * Initializes the view's scrubber by setting the maximum value of the scrubber and revalidating
+   * the JFrame to display the updated scrubber.
+   * @param lastTick the last tick of the animation (maximum value of the scrubber)
+   */
+  void initializeScrubber(int lastTick);
+
+  /**
+   * Updates the scrubber to the current tick of the animation and automatically moves the scrub bar
+   * accordingly.
+   * @param currentTick the current tick of the animation.
+   */
+  void updateScrubber(int currentTick);
 
 }
 

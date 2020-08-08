@@ -20,10 +20,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-
 import javax.swing.SpinnerNumberModel;
 
 /**
@@ -33,48 +33,41 @@ import javax.swing.SpinnerNumberModel;
  */
 public class EditorView extends VisualView implements ActionListener {
 
-  JPanel mainPanel;
-  JScrollPane mainScrollPane;
+  private final JPanel buttonPanel;
+  private final JButton playButton;
+  private final JButton pauseButton;
+  private final JButton resumeButton;
+  private final JButton restartButton;
+  private final JCheckBox loopingBox;
+  private JSpinner speedChanger;
 
-  JPanel buttonPanel;
-  JButton playButton;
-  JButton pauseButton;
-  JButton resumeButton;
-  JButton restartButton;
-  JCheckBox loopingBox;
-  JSpinner speedChanger;
+  private final ViewPanel animationPanel;
 
-  JPanel drawAndKeyframePanel;
-  ViewPanel animationPanel;
-  JPanel keyframePanel;
+  private final JList shapeList;
+  private final DefaultListModel shapeListContent;
+  private String selectedShapeName;
 
-  JPanel shapeListPanel;
-  JScrollPane shapeSelectionList;
-  JList shapeList;
-  DefaultListModel shapeListContent;
-  String selectedShapeName;
+  private final JRadioButton rectRadio;
+  private final JRadioButton ellipseRadio;
+  private final JButton addShapeButton;
+  private final JButton removeShapeButton;
+  private final JTextField newShapeNameField;
 
-  ButtonGroup shapeRadioButtons;
-  JRadioButton rectRadio;
-  JRadioButton ellipseRadio;
-  JButton addShapeButton;
-  JButton removeShapeButton;
-  JTextField newShapeNameField;
+  private final JList keyframeList;
+  private final DefaultListModel keyframeListContent;
+  private int selectedKeyframeTick;
 
-  JList keyframeList;
-  JScrollPane keyframeSelectionList;
-  DefaultListModel keyframeListContent;
-  int selectedKeyframeTick;
+  private final JSpinner keyframeTickSpinner;
+  private final JButton addKeyframeButton;
+  private JButton removeKeyframeButton;
+  private final JButton editKeyframeButton;
+  private final JSpinner xSpinner;
+  private final JSpinner ySpinner;
+  private final JSpinner widthSpinner;
+  private final JSpinner heightSpinner;
+  private Color chosenColor;
 
-  JSpinner keyframeTickSpinner;
-  JButton addKeyframeButton;
-  JButton removeKeyframeButton;
-  JButton editKeyframeButton;
-  JSpinner xSpinner;
-  JSpinner ySpinner;
-  JSpinner widthSpinner;
-  JSpinner heightSpinner;
-  Color chosenColor;
+  private JSlider scrubber;
 
   /**
    * Constructs an EditorView with a default layout of all panels, buttons, spinners, selection
@@ -88,11 +81,11 @@ public class EditorView extends VisualView implements ActionListener {
 
     this.chosenColor = Color.BLACK;
 
-    this.mainPanel = new JPanel();
-    this.mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    JPanel mainPanel = new JPanel();
+    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-    this.mainScrollPane = new JScrollPane(mainPanel);
-    this.add(this.mainScrollPane);
+    JScrollPane mainScrollPane = new JScrollPane(mainPanel);
+    this.add(mainScrollPane);
 
     //---------------------------------------------------------------------
     // Button panel
@@ -127,30 +120,30 @@ public class EditorView extends VisualView implements ActionListener {
     this.loopingBox.setText("Is looping?");
     this.buttonPanel.add(loopingBox);
 
-    this.mainPanel.add(buttonPanel);
+    mainPanel.add(buttonPanel);
 
     // ----------------------------------------------------------------
 
     // Panel containing the animation and the keyframe editing menu.
 
-    this.drawAndKeyframePanel = new JPanel();
-    this.drawAndKeyframePanel.setLayout(new BoxLayout(this.drawAndKeyframePanel, BoxLayout.X_AXIS));
+    JPanel drawAndKeyframePanel = new JPanel();
+    drawAndKeyframePanel.setLayout(new BoxLayout(drawAndKeyframePanel, BoxLayout.X_AXIS));
 
     this.animationPanel = new ViewPanel();
 
-    this.drawAndKeyframePanel.add(animationPanel);
+    drawAndKeyframePanel.add(animationPanel);
 
     // --------------------------------------------------------------------
 
     // Keyframe editing panel
 
-    this.keyframePanel = new JPanel();
+    JPanel keyframePanel = new JPanel();
 
-    this.keyframePanel.setLayout(new BoxLayout(this.keyframePanel, BoxLayout.Y_AXIS));
+    keyframePanel.setLayout(new BoxLayout(keyframePanel, BoxLayout.Y_AXIS));
     keyframePanel.setBackground(Color.lightGray);
-    this.keyframePanel.setMaximumSize(new Dimension(300, 5000));
+    keyframePanel.setMaximumSize(new Dimension(300, 5000));
 
-    this.shapeListPanel = new JPanel();
+    JPanel shapeListPanel = new JPanel();
 
     this.shapeListContent = new DefaultListModel();
     this.shapeList = new JList(shapeListContent);
@@ -159,22 +152,22 @@ public class EditorView extends VisualView implements ActionListener {
     shapeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     shapeList.setVisibleRowCount(5);
 
-    this.shapeSelectionList = new JScrollPane(shapeList);
-    this.shapeSelectionList.setMinimumSize(new Dimension(300, 200));
-    this.shapeSelectionList.setMaximumSize(new Dimension(300, 400));
-    this.shapeListPanel.add(new JLabel("Shapes"));
+    JScrollPane shapeSelectionList = new JScrollPane(shapeList);
+    shapeSelectionList.setMinimumSize(new Dimension(300, 200));
+    shapeSelectionList.setMaximumSize(new Dimension(300, 400));
+    shapeListPanel.add(new JLabel("Shapes"));
 
-    this.shapeListPanel.add(shapeSelectionList);
-    this.shapeListPanel.setBackground(Color.cyan);
-    this.shapeListPanel.setMaximumSize(new Dimension(400, 300));
+    shapeListPanel.add(shapeSelectionList);
+    shapeListPanel.setBackground(Color.cyan);
+    shapeListPanel.setMaximumSize(new Dimension(400, 300));
 
     this.rectRadio = new JRadioButton("Rectangle");
     this.rectRadio.setBackground(Color.cyan);
     this.ellipseRadio = new JRadioButton("Ellipse");
     this.ellipseRadio.setBackground(Color.cyan);
-    this.shapeRadioButtons = new ButtonGroup();
-    this.shapeRadioButtons.add(rectRadio);
-    this.shapeRadioButtons.add(ellipseRadio);
+    ButtonGroup shapeRadioButtons = new ButtonGroup();
+    shapeRadioButtons.add(rectRadio);
+    shapeRadioButtons.add(ellipseRadio);
 
     JPanel radioPanel = new JPanel();
     radioPanel.setBackground(Color.cyan);
@@ -182,7 +175,7 @@ public class EditorView extends VisualView implements ActionListener {
     radioPanel.add(rectRadio);
     radioPanel.add(ellipseRadio);
 
-    this.shapeListPanel.add(radioPanel);
+    shapeListPanel.add(radioPanel);
 
     JPanel addRemoveShapesPanel = new JPanel();
     addRemoveShapesPanel.setBackground(Color.cyan);
@@ -195,9 +188,9 @@ public class EditorView extends VisualView implements ActionListener {
     this.removeShapeButton = new JButton("Remove selected shape");
     addRemoveShapesPanel.add(removeShapeButton);
 
-    this.shapeListPanel.add(addRemoveShapesPanel);
+    shapeListPanel.add(addRemoveShapesPanel);
 
-    this.keyframePanel.add(shapeListPanel);
+    keyframePanel.add(shapeListPanel);
 
     this.keyframeListContent = new DefaultListModel();
 
@@ -206,10 +199,10 @@ public class EditorView extends VisualView implements ActionListener {
     keyframeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     keyframeList.setVisibleRowCount(5);
 
-    this.keyframeSelectionList = new JScrollPane(keyframeList);
-    this.keyframeSelectionList.setMaximumSize(new Dimension(500, 250));
-    this.keyframeSelectionList.setRowHeaderView(new JLabel("Keyframes"));
-    this.keyframePanel.add(keyframeSelectionList);
+    JScrollPane keyframeSelectionList = new JScrollPane(keyframeList);
+    keyframeSelectionList.setMaximumSize(new Dimension(500, 250));
+    keyframeSelectionList.setRowHeaderView(new JLabel("Keyframes"));
+    keyframePanel.add(keyframeSelectionList);
 
     JPanel keyframeTickPanel = new JPanel();
     keyframeTickPanel.setMaximumSize(new Dimension(200, 175));
@@ -231,7 +224,7 @@ public class EditorView extends VisualView implements ActionListener {
     keyframeTickPanel.add(keyframeTickSpinner);
     keyframeTickPanel.add(addKeyframeButton);
 
-    this.keyframePanel.add(keyframeTickPanel);
+    keyframePanel.add(keyframeTickPanel);
 
     JPanel editKeyframePanel = new JPanel();
     editKeyframePanel.setBackground(Color.PINK);
@@ -284,11 +277,17 @@ public class EditorView extends VisualView implements ActionListener {
 
     editKeyframePanel.setMaximumSize(new Dimension(700, 300));
 
-    this.keyframePanel.add(editKeyframePanel);
+    keyframePanel.add(editKeyframePanel);
 
-    this.drawAndKeyframePanel.add(keyframePanel);
+    drawAndKeyframePanel.add(keyframePanel);
 
-    this.mainPanel.add(drawAndKeyframePanel);
+    mainPanel.add(drawAndKeyframePanel);
+
+    this.scrubber = new JSlider();
+    this.scrubber.setValue(0);
+    this.scrubber.setMinimum(0);
+    this.scrubber.setEnabled(false);
+    mainPanel.add(this.scrubber);
 
   }
 
@@ -309,6 +308,7 @@ public class EditorView extends VisualView implements ActionListener {
     features.createSpeedChanger();
     this.playButton.addActionListener(e -> {
       features.playAnimation();
+      this.scrubber.setEnabled(true);
       this.playButton.setEnabled(false);
       this.pauseButton.setEnabled(true);
       this.restartButton.setEnabled(true);
@@ -325,6 +325,7 @@ public class EditorView extends VisualView implements ActionListener {
     });
     this.restartButton.addActionListener(e -> {
       features.restartAnimation();
+      this.scrubber.setEnabled(false);
       this.playButton.setEnabled(true);
       this.pauseButton.setEnabled(false);
       this.resumeButton.setEnabled(false);
@@ -365,6 +366,7 @@ public class EditorView extends VisualView implements ActionListener {
           features.addNewKeyframe((Integer) keyframeTickSpinner.getValue(), this.selectedShapeName);
           // Updates the gui list of keyframes every time the button is clicked
           features.addToKeyFrameGUIList(this.selectedShapeName);
+          features.initializeScrubber();
         });
 
     this.editKeyframeButton.addActionListener(e -> {
@@ -403,6 +405,17 @@ public class EditorView extends VisualView implements ActionListener {
 
       features.removeShape(selectedShapeName);
       features.addToShapeGUIList();
+    });
+
+    features.initializeScrubber();
+    this.scrubber.addChangeListener(e -> {
+      features.updateTick(this.scrubber.getValue());
+      if (this.scrubber.isFocusOwner()) {
+        features.pauseAnimation();
+        this.pauseButton.setEnabled(false);
+        this.resumeButton.setEnabled(true);
+      }
+      this.keyframeTickSpinner.setValue(this.scrubber.getValue());
     });
   }
 
@@ -452,5 +465,16 @@ public class EditorView extends VisualView implements ActionListener {
     this.chosenColor = new Color(r, g, b);
     this.heightSpinner.setValue(height);
     this.widthSpinner.setValue(width);
+  }
+
+  @Override
+  public void initializeScrubber(int lastTick) {
+    this.scrubber.setMaximum(lastTick);
+    this.validate();
+  }
+
+  @Override
+  public void updateScrubber(int currentTick) {
+    this.scrubber.setValue(currentTick);
   }
 }

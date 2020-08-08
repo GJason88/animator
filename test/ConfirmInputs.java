@@ -99,5 +99,15 @@ public class ConfirmInputs implements IView {
     this.log.append(String.format("%d,%d,%d,%d,%d,%d,%d", x, y, r, g, b, height, width));
   }
 
+  @Override
+  public void initializeScrubber(int lastTick) {
+    this.log.append(String.format("%d", lastTick));
+  }
+
+  @Override
+  public void updateScrubber(int currentTick) {
+    this.log.append(String.format("%d", currentTick));
+  }
+
 
 }

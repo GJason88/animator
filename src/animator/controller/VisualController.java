@@ -27,7 +27,7 @@ import java.util.function.Function;
  */
 public class VisualController extends AbstractController implements IFeatures {
 
-  public int tick;
+  private int tick;
   private Timer timer;
   private int lastTick;
 
@@ -84,6 +84,7 @@ public class VisualController extends AbstractController implements IFeatures {
             }
             shapes = model.getShapes();
             findShapesToDraw();
+            view.updateScrubber(tick);
             tick++;
           }
         },
@@ -226,6 +227,7 @@ public class VisualController extends AbstractController implements IFeatures {
   @Override
   public void restartAnimation() {
     this.tick = 0;
+    this.view.updateScrubber(0);
     this.isPlaying = false;
     this.timer.cancel();
   }
@@ -376,5 +378,17 @@ public class VisualController extends AbstractController implements IFeatures {
     }
     this.model.removeShape(name);
   }
+
+  @Override
+  public void initializeScrubber() {
+    this.view.initializeScrubber(this.lastTick);
+  }
+
+  @Override
+  public void updateTick(int scrubberTick) {
+    this.tick = scrubberTick;
+    findShapesToDraw();
+  }
+
 }
 
