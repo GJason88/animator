@@ -1,6 +1,5 @@
 package cs3500.animator.view;
 
-import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -12,13 +11,13 @@ public class SVGView extends AbstractView {
 
 
   @Override
-  public void generateSVG(String location, String svgText) {
+  public void generateSVG(Appendable a, String svgText) throws IOException {
     try {
-      FileWriter output = new FileWriter(location);
-      output.write(svgText);
-      output.close();
-    } catch (IOException e) {
-      System.out.println(svgText);
+      a.append(svgText);
+
+    }
+    catch (IOException e) {
+      throw new IOException("Unable to output SVG view to appendable");
     }
   }
 

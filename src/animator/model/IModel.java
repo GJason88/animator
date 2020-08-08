@@ -34,7 +34,7 @@ public interface IModel {
    *                                  if the adding of a motion causes the animation to contain an
    *                                  inconsistency.
    */
-  void addMotion(Motion m, Shape s) throws IllegalArgumentException;
+  void addMotion(IMotion m, Shape s) throws IllegalArgumentException;
 
   /**
    * Removes a motion from the list of motions for a particular shape.
@@ -47,16 +47,15 @@ public interface IModel {
    *                                  if the removal of a motion causes the animation to contain an
    *                                  inconsistency.
    */
-  void removeMotion(Motion m, Shape s) throws IllegalArgumentException;
+  void removeMotion(IMotion m, Shape s) throws IllegalArgumentException;
 
   /**
    * Removes a shape from an animation's list of shapes.
    *
-   * @param s the shape to remove
-   * @throws IllegalArgumentException if the given shape is null or the shape does not exist
-   *                                  in the animation
+   * @param shameName                 the name of the shape to remove
+   * @throws IllegalArgumentException if the given shape is null
    */
-  void removeShape(Shape s) throws IllegalArgumentException;
+  void removeShape(String shameName) throws IllegalArgumentException;
 
   /**
    * Gets the minimum x value for the animation canvas.
@@ -93,6 +92,24 @@ public interface IModel {
    * @throws IllegalArgumentException if the given shape is null or does not exist in this
    *                                  animation
    */
-  List<Motion> getMotionsForShape(Shape s) throws IllegalArgumentException;
+  List<IMotion> getMotionsForShape(Shape s) throws IllegalArgumentException;
+
+  /**
+   * Get keyframes for the shape with the given name.
+   *
+   * @param shapeName the name of the shape to get keyframes for
+   * @return the list of Keyframes for the shape with the given name
+   */
+  List<Keyframe> getKeyframesForShape(String shapeName) throws IllegalArgumentException;
+
+  /**
+   * Gets the shape with the given name in this animation.
+   *
+   * @param shapeName the name of the shape to find
+   * @return the Shape with the given name
+   * @throws IllegalArgumentException if the given shape name is null, or there is no shape in
+   *                                  this animation with the given name
+   */
+  Shape getShapeWithName(String shapeName) throws IllegalArgumentException;
 
 }

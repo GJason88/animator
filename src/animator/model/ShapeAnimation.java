@@ -31,8 +31,8 @@ public class ShapeAnimation implements IModel {
   private final int canvasHeight;
 
   /**
-   * Creates an animation using a provided list of shapes, and canvas specifications.
-   * empty list of shapes
+   * Creates an animation using a provided list of shapes, and canvas specifications. empty list of
+   * shapes
    *
    * @param shapes       the list of shapes to animate.
    * @param canvasX      the minimum x value that objects can be at during the animation.
@@ -83,14 +83,17 @@ public class ShapeAnimation implements IModel {
   }
 
   @Override
-  public void removeShape(Shape s) {
-    if (s == null) {
+  public void removeShape(String name) {
+    if (name == null) {
       throw new IllegalArgumentException("Shape must not be null");
     }
-    if (!this.shapes.contains(s)) {
-      throw new IllegalArgumentException("The given shape is not in this animation");
+    for (Shape s : this.shapes) {
+      if (s.getName().equals(name)) {
+        this.shapes.remove(s);
+        break;
+      }
     }
-    this.shapes.remove(s);
+
   }
 
   @Override
@@ -114,7 +117,7 @@ public class ShapeAnimation implements IModel {
   }
 
   @Override
-  public List<Motion> getMotionsForShape(Shape s) throws IllegalArgumentException {
+  public List<IMotion> getMotionsForShape(Shape s) throws IllegalArgumentException {
     if (!this.shapes.contains(s) || s == null) {
       throw new IllegalArgumentException("Given shape must exist in this animation.");
     }
@@ -122,7 +125,33 @@ public class ShapeAnimation implements IModel {
   }
 
   @Override
-  public void addMotion(Motion m, Shape s) {
+  public List<Keyframe> getKeyframesForShape(String shapeName) throws IllegalArgumentException {
+    if (shapeName == null) {
+      throw new IllegalArgumentException("Shape name cannot be null");
+    }
+    for (Shape s : this.shapes) {
+      if (s.getName().equals(shapeName)) {
+        return s.getKeyframes();
+      }
+    }
+    return new ArrayList<Keyframe>();
+  }
+
+  @Override
+  public Shape getShapeWithName(String shapeName) throws IllegalArgumentException {
+    if (shapeName == null) {
+      throw new IllegalArgumentException("Shape name cannot be null");
+    }
+    for (Shape s : this.shapes) {
+      if (s.getName().equals(shapeName)) {
+        return s;
+      }
+    }
+    throw new IllegalArgumentException("There is no shape with the given name in this animation");
+  }
+
+  @Override
+  public void addMotion(IMotion m, Shape s) {
     if (m == null || s == null) {
       throw new IllegalArgumentException("Motion and shape must not be null");
     }
@@ -136,7 +165,7 @@ public class ShapeAnimation implements IModel {
   }
 
   @Override
-  public void removeMotion(Motion m, Shape s) {
+  public void removeMotion(IMotion m, Shape s) {
     if (m == null || s == null) {
       throw new IllegalArgumentException("Motion and shape must not be null");
     }
@@ -166,10 +195,10 @@ public class ShapeAnimation implements IModel {
    *                                  another motion and attempts to modify the same fields of the
    *                                  same shape.
    */
-  public void checkConstraints() {
-    List<Motion> motionsForShape;
-    Motion m;
-    Motion next;
+  private void checkConstraints() {
+    List<IMotion> motionsForShape;
+    IMotion m;
+    IMotion next;
 
     // Look at every shape
     for (Shape s : this.shapes) {
@@ -206,9 +235,9 @@ public class ShapeAnimation implements IModel {
    *                                  another motion and attempts to modify the same field of the
    *                                  same shape
    */
-  private void checkForBadOverlaps(Motion m, Motion next) {
+  private void checkForBadOverlaps(IMotion m, IMotion next) {
     // Making sure that the motion that the next motion starts where this one left off
-    if (m.getEndingTick() <= next.getStartingTick() && !(m
+    if (m.getStartingKeyframe().getTick() <= next.getEndingKeyframe().getTick() && !(m
         .isConsistent(next))) {
       throw new IllegalArgumentException(
           "One motion must start in the same state that the one before it left off");
@@ -278,7 +307,19 @@ public class ShapeAnimation implements IModel {
         int g1, int b1, int t2, int x2, int y2, int w2, int h2, int r2, int g2, int b2) {
       for (Shape s : this.shapes) {
         if (s.getName().equals(name)) {
-          s.addMotion(new Motion(t1, x1, y1, r1, g1, b1, h1, w1, t2, x2, y2, r2, g2, b2, h2, w2));
+          if (t1 == t2 &&
+              x1 == x2 &&
+              y1 == y2 &&
+              w1 == w2 &&
+              h1 == h2 &&
+              r1 == r2 &&
+              g1 == g2 &&
+              b1 == b2) {
+            s.addMotion(new SingleKeyframeMotion(new Keyframe(t1, x1, y1, r1, g1, b1, h1, w1)));
+          } else {
+            s.addMotion(new Motion(new Keyframe(t1, x1, y1, r1, g1, b1, h1, w1),
+                new Keyframe(t2, x2, y2, r2, g2, b2, h2, w2)));
+          }
         }
       }
 
@@ -287,10 +328,17 @@ public class ShapeAnimation implements IModel {
 
     @Override
     public AnimationBuilder addKeyframe(String name, int t, int x, int y, int w, int h, int r,
-        int g,
-        int b) {
+        int g, int b) {
+      for (Shape s : this.shapes) {
+        if (s.getName().equals(name)) {
+          s.addKeyframe(t);
+          s.editKeyframe(t, new Keyframe(t, x, y, r, g, b, h, w));
+        }
+      }
+
       return this;
     }
   }
+
 
 }

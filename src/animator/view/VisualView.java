@@ -9,19 +9,21 @@ import javax.swing.JScrollPane;
 
 /**
  * A class to represent Visual Views, which are able to generate a visual animation using the Swing
- * library via JFrames, JPanels, and JScrollPanes to allow for a visual portrayal of
- * IModel Animations in a pop-up window.
+ * library via JFrames, JPanels, and JScrollPanes to allow for a visual portrayal of IModel
+ * Animations in a pop-up window.
  */
 public class VisualView extends AbstractView {
+
+
   private final ViewPanel panel;
 
   /**
    * Constructor that constructs a new VisualView with a default window size of 800x600 and window
-   * name of "Animation Visual". Consists of a JScrollPane that consists of a ViewPanel to allow
-   * for scrollbars and the portrayed visual animation within the ViewPanel.
+   * name of "Animation Visual". Consists of a JScrollPane that consists of a ViewPanel to allow for
+   * scrollbars and the portrayed visual animation within the ViewPanel.
    */
   public VisualView() {
-    this.setSize(800, 600);
+    this.setSize(1600, 900);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setTitle("Animation Visual");
     this.panel = new ViewPanel();
@@ -38,7 +40,10 @@ public class VisualView extends AbstractView {
   }
 
   @Override
-  public void setCanvasSize(int x, int y, int width, int height) {
+  public void setCanvasSize(int x, int y, int width, int height) throws IllegalArgumentException {
+    if (width < 0 || height < 0) {
+      throw new IllegalArgumentException("Width and height cannot be negative");
+    }
     this.panel.setPreferredSize(new Dimension(width, height));
     this.panel.setLocation(400, 400);
 

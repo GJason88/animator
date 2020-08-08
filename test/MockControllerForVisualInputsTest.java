@@ -1,11 +1,12 @@
 import cs3500.animator.controller.IController;
 import cs3500.animator.model.IModel;
-import cs3500.animator.model.Motion;
+import cs3500.animator.model.IMotion;
 import cs3500.animator.model.Shape;
 import cs3500.animator.view.IView;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,9 +29,9 @@ public class MockControllerForVisualInputsTest implements IController {
   /**
    * Constructs a controller with the given view, model, and tick for testing purposes.
    *
-   * @param view the given view for this controller
+   * @param view  the given view for this controller
    * @param model the given model for this controller
-   * @param tick the given tick to be at for testing
+   * @param tick  the given tick to be at for testing
    */
   public MockControllerForVisualInputsTest(IView view, IModel model, int tick) {
     this.model = model;
@@ -40,14 +41,17 @@ public class MockControllerForVisualInputsTest implements IController {
 
   }
 
+
   @Override
-  public void createSVG(String location) {
+  public void createSVG(Appendable a) throws IOException {
     // Does nothing for testing
+
   }
 
   @Override
-  public void createTextView(String location) {
+  public void createTextView(Appendable a) throws IOException {
     // Does nothing for testing
+
   }
 
   @Override
@@ -64,9 +68,21 @@ public class MockControllerForVisualInputsTest implements IController {
   }
 
   @Override
-  public int getTempo() {
+  public int getTempo() throws UnsupportedOperationException {
     return 0;
+  }
+
+
+  @Override
+  public void addFeaturesToView() {
     // Does nothing for testing
+
+  }
+
+  @Override
+  public void initializeAnimation() {
+    // Does nothing for testing
+
   }
 
   /**
@@ -89,20 +105,25 @@ public class MockControllerForVisualInputsTest implements IController {
 
     for (cs3500.animator.model.Shape s : this.shapes) {
       shapeType = s.getClass().getSimpleName();
-      for (Motion m : s.getMotions()) {
-        if (this.tick >= m.getStartingTick() && this.tick <= m.getEndingTick()) {
+      for (IMotion m : s.getMotions()) {
+        if (this.tick >= m.getStartingKeyframe().getTick() && this.tick <= m.getEndingKeyframe()
+            .getTick()) {
           interpolatedFields =
               new ArrayList<>(Arrays.asList(
                   this.interpolate(
-                      m.getStartingTick(), m.getEndingTick(), m.getStartX(), m.getEndX())
+                      m.getStartingKeyframe().getTick(), m.getEndingKeyframe().getTick(),
+                      m.getStartingKeyframe().getX(), m.getEndingKeyframe().getX())
                       + this.model.getCanvasX(),
                   this.interpolate(
-                      m.getStartingTick(), m.getEndingTick(), m.getStartY(), m.getEndY())
+                      m.getStartingKeyframe().getTick(), m.getEndingKeyframe().getTick(),
+                      m.getStartingKeyframe().getY(), m.getEndingKeyframe().getY())
                       + this.model.getCanvasY(),
                   this.interpolate(
-                      m.getStartingTick(), m.getEndingTick(), m.getStartWidth(), m.getEndWidth()),
+                      m.getStartingKeyframe().getTick(), m.getEndingKeyframe().getTick(),
+                      m.getStartingKeyframe().getWidth(), m.getEndingKeyframe().getWidth()),
                   this.interpolate(
-                      m.getStartingTick(), m.getEndingTick(), m.getStartHeight(), m.getEndHeight()))
+                      m.getStartingKeyframe().getTick(), m.getEndingKeyframe().getTick(),
+                      m.getStartingKeyframe().getHeight(), m.getEndingKeyframe().getHeight()))
               );
 
           // adds the shapes to be drawn at the current tick to a list that is to be passed to the
@@ -111,11 +132,14 @@ public class MockControllerForVisualInputsTest implements IController {
           currentColors.add(
               new Color(
                   this.interpolate(
-                      m.getStartingTick(), m.getEndingTick(), m.getStartR(), m.getEndR()),
+                      m.getStartingKeyframe().getTick(), m.getEndingKeyframe().getTick(),
+                      m.getStartingKeyframe().getR(), m.getEndingKeyframe().getR()),
                   this.interpolate(
-                      m.getStartingTick(), m.getEndingTick(), m.getStartG(), m.getEndG()),
+                      m.getStartingKeyframe().getTick(), m.getEndingKeyframe().getTick(),
+                      m.getStartingKeyframe().getG(), m.getEndingKeyframe().getG()),
                   this.interpolate(
-                      m.getStartingTick(), m.getEndingTick(), m.getStartB(), m.getEndB())));
+                      m.getStartingKeyframe().getTick(), m.getEndingKeyframe().getTick(),
+                      m.getStartingKeyframe().getB(), m.getEndingKeyframe().getB())));
         }
       }
     }
@@ -123,12 +147,13 @@ public class MockControllerForVisualInputsTest implements IController {
   }
 
   /**
-   * Interpolates the "between" values of a given field based on the current tick and
-   * the starting and ending ticks of the motion of a Shape.
-   * @param startTick the starting tick of the motion
-   * @param endTick the ending tick of the motion
+   * Interpolates the "between" values of a given field based on the current tick and the starting
+   * and ending ticks of the motion of a Shape.
+   *
+   * @param startTick  the starting tick of the motion
+   * @param endTick    the ending tick of the motion
    * @param startValue the starting value of the field in the motion
-   * @param endValue the ending value of the field in the motion
+   * @param endValue   the ending value of the field in the motion
    * @return the interpolated value of the field in the motion.
    */
   private int interpolate(int startTick, int endTick, int startValue, int endValue) {

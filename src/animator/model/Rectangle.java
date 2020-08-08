@@ -15,7 +15,7 @@ public class Rectangle extends AbstractShape {
    * @param motions the list of motions for this shape
    * @throws IllegalArgumentException if the given String name or list of motions is null.
    */
-  public Rectangle(String name, List<Motion> motions) {
+  public Rectangle(String name, List<IMotion> motions) {
     super(name, motions);
   }
 
@@ -36,15 +36,16 @@ public class Rectangle extends AbstractShape {
           this.getName()));
       return result.toString();
     }
-    Motion firstMotion = this.getMotions().get(0);
+    IMotion firstMotion = this.getMotions().get(0);
 
     result.append(String.format(
         "<rect id=\"%s\" x=\"%s\" y=\"%s\" width=\"%s\" height=\"%s\" "
             + "fill=\"rgb(%s,%s,%s)\" visibility=\"visible\" opacity=\"0\" >",
-        this.getName(), firstMotion.getStartX() - offsetX,
-        firstMotion.getStartY() - offsetY,
-        firstMotion.getStartWidth(), firstMotion.getStartHeight(),
-        firstMotion.getStartR(), firstMotion.getStartG(), firstMotion.getEndB()));
+        this.getName(), firstMotion.getStartingKeyframe().getX() - offsetX,
+        firstMotion.getStartingKeyframe().getY() - offsetY,
+        firstMotion.getStartingKeyframe().getWidth(), firstMotion.getStartingKeyframe().getHeight(),
+        firstMotion.getStartingKeyframe().getR(), firstMotion.getStartingKeyframe().getG(),
+        firstMotion.getEndingKeyframe().getB()));
 
     return result.toString();
   }
@@ -61,25 +62,27 @@ public class Rectangle extends AbstractShape {
   public String makeSVGMotions(int tempo, int offsetX, int offsetY) {
     StringBuilder result = new StringBuilder();
     boolean visible = false;
-    for (Motion m : this.getMotions()) {
+    for (IMotion m : this.getMotions()) {
       if (!visible) {
         result.append(animateMap(tempo, offsetX, offsetY).get("show").apply("opacity", m));
         visible = true;
       }
-      if (m.getStartX() != m.getEndX()) {
+      if (m.getStartingKeyframe().getX() != m.getEndingKeyframe().getX()) {
         result.append(animateMap(tempo, offsetX, offsetY).get("x").apply("x", m));
       }
-      if (m.getStartY() != m.getEndY()) {
+      if (m.getStartingKeyframe().getY() != m.getEndingKeyframe().getY()) {
         result.append(animateMap(tempo, offsetX, offsetY).get("y").apply("y", m));
       }
-      if (m.getStartWidth() != m.getEndWidth()) {
+      if (m.getStartingKeyframe().getWidth() != m.getEndingKeyframe().getWidth()) {
         result.append(animateMap(tempo, offsetX, offsetY).get("width").apply("width", m));
       }
-      if (m.getStartHeight() != m.getEndHeight()) {
+      if (m.getStartingKeyframe().getHeight() != m.getEndingKeyframe().getHeight()) {
         result.append(animateMap(tempo, offsetX, offsetY).get("height").apply("height", m));
       }
-      if (m.getStartR() != m.getEndR() || m.getStartG() != m.getEndG() || m.getStartB() != m
-          .getEndB()) {
+      if (m.getStartingKeyframe().getR() != m.getEndingKeyframe().getR()
+          || m.getStartingKeyframe().getG() != m.getEndingKeyframe().getG()
+          || m.getStartingKeyframe().getB() != m
+          .getEndingKeyframe().getB()) {
         result.append(animateMap(tempo, offsetX, offsetY).get("color").apply("fill", m));
       }
     }

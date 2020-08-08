@@ -1,6 +1,5 @@
 package cs3500.animator.view;
 
-import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -11,14 +10,14 @@ import java.io.IOException;
 public class TextView extends AbstractView {
 
   @Override
-  public void printTextView(String textDescription, String location) {
+  public void printTextView(String textDescription, Appendable a) throws IOException {
     try {
-      FileWriter output = new FileWriter(location);
-      output.write(textDescription);
-      output.close();
+      a.append(textDescription);
     } catch (IOException e) {
-      System.out.println(textDescription);
+      throw new IOException("Unable to output text view to appendable");
     }
   }
-
 }
+
+
+

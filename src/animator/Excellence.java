@@ -1,16 +1,15 @@
 package cs3500.animator;
 
-import cs3500.animator.controller.ExcellenceController;
+import cs3500.animator.controller.AbstractController;
 import cs3500.animator.controller.IController;
 import cs3500.animator.model.IModel;
 import cs3500.animator.model.ShapeAnimation;
 import cs3500.animator.model.ShapeAnimation.AnimationBuilderImpl;
 import cs3500.animator.util.AnimationBuilder;
 import cs3500.animator.util.AnimationReader;
-import cs3500.animator.view.AbstractView;
 import java.io.File;
 import java.io.FileReader;
-import cs3500.animator.view.IView;
+import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -31,7 +30,7 @@ public class Excellence {
 
     int tempo = 1;
     String inputFile = "";
-    String outputFile = "";
+    Appendable outputFile = System.out;
     String viewType = "";
     int i = 0;
     while (i < args.length) {
@@ -53,7 +52,7 @@ public class Excellence {
 
         case "-out":
           if (i + 1 < args.length) {
-            outputFile = args[i + 1];
+            outputFile = new FileWriter(args[i + 1]);
           }
           i = i + 2;
           break;
@@ -83,25 +82,29 @@ public class Excellence {
     IModel model = new ShapeAnimation(fileAnimation.getShapes(),
         fileAnimation.getCanvasX(), fileAnimation.getCanvasY(),
         fileAnimation.getCanvasWidth(), fileAnimation.getCanvasHeight());
-    IController controller;
 
-    IView view = AbstractView.createViewFactory().create(viewType);
+    IController controller = AbstractController.createControllerFactory().create(model, viewType);
     switch (viewType) {
       case "text":
-        controller = new ExcellenceController(view, model);
         controller.createTextView(outputFile);
 
         break;
       case "svg":
-        controller = new ExcellenceController(view, model);
         controller.setTempo(tempo);
         controller.createSVG(outputFile);
 
         break;
       case "visual":
-        controller = new ExcellenceController(view, model);
         controller.setTempo(tempo);
+        controller.initializeAnimation();
         controller.startAnimation();
+        break;
+      case "edit":
+        controller.setTempo(tempo);
+
+        controller.addFeaturesToView();
+        controller.initializeAnimation();
+
         break;
       default:
         JFrame frame = new JFrame();

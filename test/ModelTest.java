@@ -1,8 +1,9 @@
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import cs3500.animator.model.IMotion;
+import cs3500.animator.model.Keyframe;
 import cs3500.animator.model.Motion;
 import cs3500.animator.model.Oval;
 import cs3500.animator.model.Rectangle;
@@ -40,89 +41,90 @@ public class ModelTest {
   private Motion m3_o;
   private Motion m1_o11;
 
-  private List<Motion> motionsRectA;
-  private List<Motion> motionsRectB;
-  private List<Motion> motionsOvalA;
+  private List<IMotion> motionsRectA;
+  private List<IMotion> motionsRectB;
+  private List<IMotion> motionsOvalA;
 
   private Rectangle rectA;
 
   private Motion changingColorMotion;
   private Motion changingPositionMotion;
 
-
   @Before
   public void init() {
 
+    Keyframe k1 = new Keyframe(0, 5, 0, 255, 0, 0, 20, 30);
+
     // Motions for rectangle A
-    this.m1 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
-        5, 10, 1, 0, 0, 255, 50, 10);
-    this.m1_o1 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
-        5, 6, 0, 255, 0, 0, 20, 30);
-    this.m1_o11 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
-        5, 5, 0, 0, 255, 0, 20, 30);
+    this.m1 = new Motion(k1,
+        new Keyframe(5, 10, 1, 0, 0, 255, 50, 10));
+    this.m1_o1 = new Motion(k1,
+        new Keyframe(5, 6, 0, 255, 0, 0, 20, 30));
+    this.m1_o11 = new Motion(k1,
+        new Keyframe(5, 5, 0, 0, 255, 0, 20, 30));
 
-    this.m1_o2 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
-        5, 5, 1, 255, 0, 0, 20, 30);
+    this.m1_o2 = new Motion(k1,
+        new Keyframe(5, 5, 1, 255, 0, 0, 20, 30));
 
-    this.m1_o3 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
-        5, 5, 0, 255, 0, 0, 20, 31);
-    this.m1_o4 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
-        5, 5, 0, 255, 0, 0, 21, 30);
-    this.m1_o5 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
-        5, 5, 0, 0, 255, 0, 20, 31);
-    this.m1_o6 = new Motion(1, 5, 0, 255, 0, 0, 20, 30,
-        4, 6, 0, 255, 0, 0, 20, 30);
-    this.m1_o7 = new Motion(1, 5, 0, 255, 0, 0, 20, 30,
-        6, 6, 0, 255, 0, 0, 20, 30);
+    this.m1_o3 = new Motion(k1,
+        new Keyframe(5, 5, 0, 255, 0, 0, 20, 31));
+    this.m1_o4 = new Motion(k1,
+        new Keyframe(5, 5, 0, 255, 0, 0, 21, 30));
+    this.m1_o5 = new Motion(k1,
+        new Keyframe(5, 5, 0, 0, 255, 0, 20, 31));
+    this.m1_o6 = new Motion(new Keyframe(1, 5, 0, 255, 0, 0, 20, 30),
+        new Keyframe(4, 6, 0, 255, 0, 0, 20, 30));
+    this.m1_o7 = new Motion(new Keyframe(1, 5, 0, 255, 0, 0, 20, 30),
+        new Keyframe(6, 6, 0, 255, 0, 0, 20, 30));
 
-    this.m3 = new Motion(5, 6, 1, 0, 255, 0, 23, 33,
-        10, 5, 3, 255, 0, 0, 20, 30);
-    this.m3_o = new Motion(4, 6, 1, 0, 255, 0, 23, 33,
-        9, 5, 3, 255, 0, 0, 20, 30);
-    this.m2 = new Motion(12, 5, 0, 255, 0, 0, 20, 30,
-        20, 5, 2, 255, 0, 0, 20, 30);
+    this.m3 = new Motion(new Keyframe(5, 6, 1, 0, 255, 0, 23, 33),
+        new Keyframe(10, 5, 3, 255, 0, 0, 20, 30));
+    this.m3_o = new Motion(new Keyframe(4, 6, 1, 0, 255, 0, 23, 33),
+        new Keyframe(9, 5, 3, 255, 0, 0, 20, 30));
+    this.m2 = new Motion(new Keyframe(12, 5, 0, 255, 0, 0, 20, 30),
+        new Keyframe(20, 5, 2, 255, 0, 0, 20, 30));
 
-    Motion m2_1 = new Motion(13, 5, 3, 255, 0, 0, 20, 30,
-        14, 5, 2, 255, 0, 0, 20, 30);
-    Motion m2_2 = new Motion(13, 5, 3, 255, 0, 0, 20, 30,
-        22, 5, 2, 255, 0, 0, 20, 30);
-    Motion m2_3 = new Motion(11, 5, 3, 255, 0, 0, 20, 30,
-        15, 5, 2, 255, 0, 0, 20, 30);
-    Motion m2_4 = new Motion(20, 5, 0, 255, 0, 0, 20, 30,
-        30, 5, 2, 255, 0, 0, 20, 30);
+    Motion m2_1 = new Motion(new Keyframe(13, 5, 3, 255, 0, 0, 20, 30),
+        new Keyframe(14, 5, 2, 255, 0, 0, 20, 30));
+    Motion m2_2 = new Motion(new Keyframe(13, 5, 3, 255, 0, 0, 20, 30),
+        new Keyframe(22, 5, 2, 255, 0, 0, 20, 30));
+    Motion m2_3 = new Motion(new Keyframe(11, 5, 3, 255, 0, 0, 20, 30),
+        new Keyframe(15, 5, 2, 255, 0, 0, 20, 30));
+    Motion m2_4 = new Motion(new Keyframe(20, 5, 0, 255, 0, 0, 20, 30),
+        new Keyframe(30, 5, 2, 255, 0, 0, 20, 30));
 
     // Motions for cs3500.animator.model.Oval B
     // Motions for cs3500.animator.model.Oval B
-    Motion m4 = new Motion(5, 5, 0, 255, 0, 0, 20, 30,
-        10, 5, 1, 255, 0, 0, 20, 30);
+    Motion m4 = new Motion(new Keyframe(5, 5, 0, 255, 0, 0, 20, 30),
+        new Keyframe(10, 5, 1, 255, 0, 0, 20, 30));
 
-    this.m5 = new Motion(10, 5, 1, 255, 0, 0, 20, 30,
-        20, 5, 2, 0, 255, 0, 20, 30);
+    this.m5 = new Motion(new Keyframe(10, 5, 1, 255, 0, 0, 20, 30),
+        new Keyframe(20, 5, 2, 0, 255, 0, 20, 30));
 
-    Motion m6 = new Motion(20, 5, 2, 0, 255, 0, 20, 30,
-        30, 5, 3, 255, 0, 0, 20, 30);
+    Motion m6 = new Motion(new Keyframe(20, 5, 2, 0, 255, 0, 20, 30),
+        new Keyframe(30, 5, 3, 255, 0, 0, 20, 30));
 
-    this.m7 = new Motion(5, 10, 0, 0, 0, 255, 50, 10,
-        15, 5, 0, 255, 0, 0, 20, 30);
+    this.m7 = new Motion(new Keyframe(5, 10, 0, 0, 0, 255, 50, 10),
+        new Keyframe(15, 5, 0, 255, 0, 0, 20, 30));
 
-    this.changingColorMotion = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
-        10, 5, 0, 0, 0, 255, 20, 30);
+    this.changingColorMotion = new Motion(k1,
+        new Keyframe(10, 5, 0, 0, 0, 255, 20, 30));
 
-    this.changingPositionMotion = new Motion(5, 5, 0, 255, 0, 0, 20, 30,
-        15, 5, 10, 255, 0, 0, 20, 30);
+    this.changingPositionMotion = new Motion(new Keyframe(5, 5, 0, 255, 0, 0, 20, 30),
+        new Keyframe(15, 5, 10, 255, 0, 0, 20, 30));
 
     motionsRectA = new ArrayList(Arrays.asList(
         m1, m1_o1, m1_o11, m1_o2, m1_o3, m1_o4, m1_o5, m1_o6, m1_o7, m2_4));
     motionsRectB = new ArrayList(Arrays.asList(m7));
     motionsOvalA = new ArrayList(Arrays.asList(m4));
-    List<Motion> motionsRectA1 = new ArrayList(Arrays.asList(m4, m5, m6));
-    List<Motion> motionsRectA2 = new ArrayList(Arrays.asList(m6));
-    List<Motion> motionsRectA3 = new ArrayList(Arrays.asList(m2, m2_1));
-    List<Motion> motionsOvalA1 = new ArrayList(Arrays.asList(m4, m5, m6));
-    List<Motion> motionsOvalA2 = new ArrayList(Arrays.asList(m6));
-    List<Motion> motionsChangingColor = new ArrayList(Arrays.asList(changingColorMotion));
-    List<Motion> motionsChangingPosition = new ArrayList(Arrays.asList(changingPositionMotion));
-    List<Motion> emptyMotions = new ArrayList<>();
+    List<IMotion> motionsRectA1 = new ArrayList(Arrays.asList(m4, m5, m6));
+    List<IMotion> motionsRectA2 = new ArrayList(Arrays.asList(m6));
+    List<IMotion> motionsRectA3 = new ArrayList(Arrays.asList(m2, m2_1));
+    List<IMotion> motionsOvalA1 = new ArrayList(Arrays.asList(m4, m5, m6));
+    List<IMotion> motionsOvalA2 = new ArrayList(Arrays.asList(m6));
+    List<IMotion> motionsChangingColor = new ArrayList(Arrays.asList(changingColorMotion));
+    List<IMotion> motionsChangingPosition = new ArrayList(Arrays.asList(changingPositionMotion));
+    List<IMotion> emptyMotions = new ArrayList<>();
 
     // Overlaps but changing different fields
 
@@ -155,45 +157,46 @@ public class ModelTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testNegativeStart() {
-    new Motion(-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+    new Motion(new Keyframe(-1, 2, 3, 4, 5, 6, 7, 8), new Keyframe(9, 10, 11, 12, 13, 14, 15, 16));
   }
 
   //
   @Test(expected = IllegalArgumentException.class)
   public void testNegativeEnd() {
-    new Motion(-10, 2, 3, 4, 5, 6, 7, 8, -9, 10, 11, 12, 13, 14, 15, 16);
+    new Motion(new Keyframe(-10, 2, 3, 4, 5, 6, 7, 8),
+        new Keyframe(-9, 10, 11, 12, 13, 14, 15, 16));
   }
 
   //
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidMotionEndTickLessThanStart() {
-    new Motion(10, 2, 3, 4, 5, 6, 7, 8, 5, 10, 11, 12, 13, 14, 15, 16);
+    new Motion(new Keyframe(10, 2, 3, 4, 5, 6, 7, 8), new Keyframe(5, 10, 11, 12, 13, 14, 15, 16));
 
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testBadColorV1() {
-    new Motion(0, 2, 3, 256, 5, 6, 7, 8,
-        5, 10, 11, 12, 13, 14, 15, 16);
+    new Motion(new Keyframe(0, 2, 3, 256, 5, 6, 7, 8),
+        new Keyframe(5, 10, 11, 12, 13, 14, 15, 16));
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testBadColorV2() {
-    new Motion(0, 2, 3, 0, -200, 6, 7, 8,
-        5, 10, 11, 12, 13, 14, 15, 16);
+    new Motion(new Keyframe(0, 2, 3, 0, -200, 6, 7, 8),
+        new Keyframe(5, 10, 11, 12, 13, 14, 15, 16));
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testNegativeWidth() {
-    new Motion(0, 2, 3, 0, 5, 6, 7, 8,
-        5, 10, 11, 12, 13, 14, 15, -20);
+    new Motion(new Keyframe(0, 2, 3, 0, 5, 6, 7, 8),
+        new Keyframe(5, 10, 11, 12, 13, 14, 15, -20));
 
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testNegativeHeight() {
-    new Motion(0, 2, 3, 0, 5, 6, -90, 8,
-        5, 10, 11, 12, 13, 14, 15, 16);
+    new Motion(new Keyframe(0, 2, 3, 0, 5, 6, -90, 8),
+        new Keyframe(5, 10, 11, 12, 13, 14, 15, 16));
 
   }
 
@@ -249,98 +252,97 @@ public class ModelTest {
 
   @Test
   public void testGetStartingTick() {
-    assertEquals(0, this.m1.getStartingTick());
+    assertEquals(0, this.m1.getStartingKeyframe().getTick());
 
   }
 
   @Test
   public void testGetEndingTick() {
-    assertEquals(5, this.m1.getEndingTick());
+    assertEquals(5, this.m1.getEndingKeyframe().getTick());
   }
 
   @Test
   public void testGetStartingX() {
-    assertEquals(5, this.m1.getStartX());
+    assertEquals(5, this.m1.getStartingKeyframe().getX());
   }
 
   @Test
   public void testGetStartingY() {
-    assertEquals(0, this.m1.getStartY());
+    assertEquals(0, this.m1.getStartingKeyframe().getY());
   }
 
   @Test
   public void testGetStartingR() {
-    assertEquals(255, this.m1.getStartR());
+    assertEquals(255, this.m1.getStartingKeyframe().getR());
   }
 
   @Test
   public void testGetStartingG() {
-    assertEquals(0, this.m1.getStartG());
+    assertEquals(0, this.m1.getStartingKeyframe().getG());
   }
 
   @Test
   public void testGetStartingB() {
-    assertEquals(0, this.m1.getStartB());
+    assertEquals(0, this.m1.getStartingKeyframe().getB());
   }
 
   @Test
   public void testGetStartingWidth() {
-    assertEquals(30, this.m1.getStartWidth());
+    assertEquals(30, this.m1.getStartingKeyframe().getWidth());
   }
 
   @Test
   public void testGetStartingHeight() {
-    assertEquals(20, this.m1.getStartHeight());
+    assertEquals(20, this.m1.getStartingKeyframe().getHeight());
   }
 
 
   @Test
   public void testGetEndingX() {
-    assertEquals(10, this.m1.getEndX());
+    assertEquals(10, this.m1.getEndingKeyframe().getX());
   }
 
   @Test
   public void testGetEndingY() {
-    assertEquals(1, this.m1.getEndY());
+    assertEquals(1, this.m1.getEndingKeyframe().getY());
   }
 
   @Test
   public void testGetEndingR() {
-    assertEquals(0, this.m1.getEndR());
+    assertEquals(0, this.m1.getEndingKeyframe().getR());
   }
 
   @Test
   public void testGetEndingG() {
-    assertEquals(0, this.m1.getEndG());
+    assertEquals(0, this.m1.getEndingKeyframe().getG());
   }
 
   @Test
   public void testGetEndingB() {
-    assertEquals(255, this.m1.getEndB());
+    assertEquals(255, this.m1.getEndingKeyframe().getB());
   }
 
   @Test
   public void testGetEndingWidth() {
-    assertEquals(10, this.m1.getEndWidth());
+    assertEquals(10, this.m1.getEndingKeyframe().getWidth());
   }
 
   @Test
   public void testGetEndingHeight() {
-    assertEquals(50, this.m1.getEndHeight());
+    assertEquals(50, this.m1.getEndingKeyframe().getHeight());
   }
 
 
   @Test
   public void testIsConsistent() {
-    Motion motion1 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
+    Motion motion1 = new Motion(new Keyframe(0, 5, 0, 255, 0, 0, 20, 30),
+        new Keyframe(5, 10, 1, 0, 0, 255, 50, 10));
 
-        5, 10, 1, 0, 0, 255, 50, 10);
+    Motion motion2 = new Motion(new Keyframe(5, 10, 1, 0, 0, 255, 50, 10),
+        new Keyframe(10, 20, 1, 0, 0, 255, 50, 10));
 
-    Motion motion2 = new Motion(5, 10, 1, 0, 0, 255, 50, 10,
-        10, 20, 1, 0, 0, 255, 50, 10);
-
-    Motion motion3 = new Motion(10, 25, 1, 0, 0, 255, 50, 10,
-        20, 20, 1, 0, 0, 255, 50, 10);
+    Motion motion3 = new Motion(new Keyframe(10, 25, 1, 0, 0, 255, 50, 10),
+        new Keyframe(20, 20, 1, 0, 0, 255, 50, 10));
 
     assertTrue(motion1.isConsistent(motion2));
     assertFalse(motion2.isConsistent(motion3));
@@ -377,11 +379,11 @@ public class ModelTest {
     assertEquals(this.motionsRectB, this.rectB.getMotions());
     assertEquals(1, this.rectB.getMotions().size());
 
-    Motion addedMotion = new Motion(15, 5, 0, 255, 0, 0, 20, 30,
-        20, 5, 0, 0, 255, 0, 20, 30);
+    Motion addedMotion = new Motion(new Keyframe(15, 5, 0, 255, 0, 0, 20, 30),
+        new Keyframe(20, 5, 0, 0, 255, 0, 20, 30));
     rectB.addMotion(addedMotion);
 
-    assertEquals(new ArrayList<Motion>(Arrays.asList(this.m7, addedMotion)),
+    assertEquals(new ArrayList<IMotion>(Arrays.asList(this.m7, addedMotion)),
         this.rectB.getMotions());
     assertEquals(2, this.rectB.getMotions().size());
   }
@@ -393,7 +395,7 @@ public class ModelTest {
 
     rectB.removeMotion(this.m7);
 
-    assertEquals(new ArrayList<Motion>(Arrays.asList()), this.rectB.getMotions());
+    assertEquals(new ArrayList<IMotion>(Arrays.asList()), this.rectB.getMotions());
     assertEquals(0, this.rectB.getMotions().size());
   }
 

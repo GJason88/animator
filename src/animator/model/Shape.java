@@ -19,7 +19,7 @@ public interface Shape {
    *
    * @return the shape's list of motions
    */
-  List<Motion> getMotions();
+  List<IMotion> getMotions();
 
   /**
    * Adds a motion to a shape's list of motions.
@@ -27,7 +27,7 @@ public interface Shape {
    * @param m the motion to add
    * @throws IllegalArgumentException if given motion is null
    */
-  void addMotion(Motion m) throws IllegalArgumentException;
+  void addMotion(IMotion m) throws IllegalArgumentException;
 
   /**
    * Removes a motion from a shape's list of motions.
@@ -35,7 +35,7 @@ public interface Shape {
    * @param m the motion to remove
    * @throws IllegalArgumentException if given motion is null or is not contained in this shape
    */
-  void removeMotion(Motion m) throws IllegalArgumentException;
+  void removeMotion(IMotion m) throws IllegalArgumentException;
 
   /**
    * Creates a line of SVG code to define a shape using this shape's first motion as a starting
@@ -57,4 +57,34 @@ public interface Shape {
    * @return a string that has SVG code to create animations for all of this shape's motions.
    */
   String makeSVGMotions(int tempo, int offsetX, int offsetY);
+
+  /**
+   * Gets the list of keyframes for this shape.
+   *
+   * @return the list of keyframes for this shape.
+   */
+  List<Keyframe> getKeyframes();
+
+  /**
+   * Add a new keyframe to this shape at the given tick.
+   *
+   * @param tick the tick to add a new keyframe at.
+   * @throws IllegalArgumentException if there is already a keyframe at the given tick location
+   */
+  void addKeyframe(int tick);
+
+  /**
+   * Deletes the keyframe at the given tick for this shape.
+   *
+   * @param tick the tick to delete a keyframe from
+   */
+  void deleteKeyframe(int tick);
+
+  /**
+   * Replaces the keyframe at the given tick with the provided new keyframe.
+   *
+   * @param tick        the tick of the keyframe to edit
+   * @param newKeyframe the keyframe to use as a replacement
+   */
+  void editKeyframe(int tick, Keyframe newKeyframe);
 }

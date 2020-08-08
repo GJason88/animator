@@ -1,7 +1,9 @@
 package cs3500.animator.view;
 
+import cs3500.animator.controller.IFeatures;
 import java.awt.Color;
 import java.awt.Shape;
+import java.io.IOException;
 import java.util.List;
 import javax.swing.JFrame;
 
@@ -19,22 +21,21 @@ public class AbstractView extends JFrame implements IView {
    * @throws UnsupportedOperationException always for SVGViews and VisualViews.
    */
   @Override
-  public void printTextView(String textDescription, String directory)
-      throws UnsupportedOperationException {
+  public void printTextView(String textDescription, Appendable a)
+      throws UnsupportedOperationException, IOException {
     throw new UnsupportedOperationException("Unsupported for SVG Views and Visual Views.");
   }
 
   /**
    * Unsupported for TextViews and VisualViews.
    *
-   * @param location the given location and name in which to create the SVG file or replace an
-   *                 already existing file
+   * @param a        the appendable to write to.
    * @param svgText  the text that the SVG file will consist of
    * @throws UnsupportedOperationException always for TextViews and VisualViews.
    */
   @Override
-  public void generateSVG(String location, String svgText)
-      throws UnsupportedOperationException {
+  public void generateSVG(Appendable a, String svgText)
+      throws UnsupportedOperationException, IOException {
     throw new UnsupportedOperationException("Unsupported for Textual View and Visual Views.");
   }
 
@@ -86,39 +87,69 @@ public class AbstractView extends JFrame implements IView {
     throw new UnsupportedOperationException("Unsupported for SVG View and Textual Views.");
   }
 
+  // Methods used in the editor view
   /**
-   * Creates a new ViewFactory for making a specific view type for the Excellence main() method.
+   * Unsupported for SVGViews, VisualViews, and TextViews.
    *
-   * @return a new ViewFactory
+   * @throws UnsupportedOperationException always for SVGViews, VisualViews, and TextViews.
    */
-  public static ViewFactory createViewFactory() {
-    return new ViewFactory();
+  @Override
+  public void addFeatures(IFeatures features) {
+    throw new UnsupportedOperationException("Unsupported for SVG View, visual, and Textual Views.");
   }
 
   /**
-   * Factory class to create a TextView, VisualView, or SVGView based on command-line input in the
-   * Excellence main() method.
+   * Unsupported for SVGViews, VisualViews, and TextViews.
+   *
+   * @throws UnsupportedOperationException always for SVGViews, VisualViews, and TextViews.
    */
-  public static class ViewFactory {
+  @Override
+  public void initializeSpeedChanger(int speed) {
+    throw new UnsupportedOperationException("Unsupported for SVG View, visual, and Textual Views.");
 
-    /**
-     * Creates a TextView, VisualView, or SVGView based on a given string that is the command-line
-     * input in the main() method of Excellence.
-     *
-     * @param view the given view type as a command-line input
-     * @return a new IView implementation based on the string given
-     */
-    public IView create(String view) {
-      switch (view) {
-        case "text":
-          return new TextView();
-        case "svg":
-          return new SVGView();
-        case "visual":
-          return new VisualView();
-        default:
-          return null;
-      }
-    }
   }
+
+  /**
+   * Unsupported for SVGViews, VisualViews, and TextViews.
+   *
+   * @throws UnsupportedOperationException always for SVGViews, VisualViews, and TextViews.
+   */
+  @Override
+  public void initializeShapeList(List<String> shapes) {
+    throw new UnsupportedOperationException("Unsupported for SVG View, visual, and Textual Views.");
+
+  }
+
+  /**
+   * Unsupported for SVGViews, VisualViews, and TextViews.
+   *
+   * @throws UnsupportedOperationException always for SVGViews, VisualViews, and TextViews.
+   */
+  @Override
+  public void initializeKeyframeList(List<String> keyframes) {
+    throw new UnsupportedOperationException("Unsupported for SVG View, visual, and Textual Views.");
+
+  }
+
+  /**
+   * Unsupported for SVGViews, VisualViews, and TextViews.
+   *
+   * @throws UnsupportedOperationException always for SVGViews, VisualViews, and TextViews.
+   */
+  @Override
+  public void makePopupError(String message) {
+    throw new UnsupportedOperationException("Unsupported for SVG View, visual, and Textual Views.");
+
+  }
+
+  /**
+   * Unsupported for SVGViews, VisualViews, and TextViews.
+   *
+   * @throws UnsupportedOperationException always for SVGViews, VisualViews, and TextViews.
+   */
+  @Override
+  public void updateKeyframeEditorGUI(int x, int y, int r, int g, int b, int height, int width) {
+    throw new UnsupportedOperationException("Unsupported for SVG View, visual, and Textual Views.");
+  }
+
 }
