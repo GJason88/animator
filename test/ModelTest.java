@@ -3,41 +3,32 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.awt.Color;
+import cs3500.animator.model.Motion;
+import cs3500.animator.model.Oval;
+import cs3500.animator.model.Rectangle;
+import cs3500.animator.model.Shape;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Class to represent tests to ensure the functionality of the Excellence simple animator.
+ * Class to represent tests to ensure the functionality of the cs3500.animator.model.IModel simple
+ * animator.
  */
 public class ModelTest {
 
-  private Rectangle rectA;
-  private Oval ovalA;
-
-  private Rectangle rectA1;
-  private Rectangle rectA2;
-  private Rectangle rectA3;
 
   //Motions for rectA
   private Motion m1;
 
   private Motion m2;
-  private Motion m2_1;
-  private Motion m2_2;
-  private Motion m2_3;
-  private Motion m2_4;
 
   private Motion m3;
 
-  // Motions for Oval B
-  private Motion m4;
   private Motion m5;
-  private Motion m6;
   private Rectangle rectB;
-  private Rectangle rectB1;
   private Motion m7;
   private Motion m1_o1;
   private Motion m1_o2;
@@ -49,177 +40,172 @@ public class ModelTest {
   private Motion m3_o;
   private Motion m1_o11;
 
+  private List<Motion> motionsRectA;
+  private List<Motion> motionsRectB;
+  private List<Motion> motionsOvalA;
 
-  Rectangle changingColorStart;
-  Rectangle changingColorEnd;
+  private Rectangle rectA;
 
-  Rectangle changingPositionStart;
-  Rectangle changingPositionEnd;
-
-  Motion changingColorMotion;
-  Motion changingPositionMotion;
+  private Motion changingColorMotion;
+  private Motion changingPositionMotion;
 
 
   @Before
   public void init() {
-    this.rectA = new Rectangle(5, 0, Color.red, 20, 30, "rect A");
-    this.rectB = new Rectangle(10, 0, Color.blue, 50, 10, "rect B");
-    this.ovalA = new Oval(5, 0, Color.red, 20, 30, "oval A");
-
-    this.rectA1 = new Rectangle(6, 1, Color.green, 23, 33, "rect A");
-
-    this.rectA2 = new Rectangle(5, 2, Color.red, 20, 30, "rect A");
-    this.rectA3 = new Rectangle(5, 3, Color.red, 20, 30, "rect A");
-
-    this.rectB1 = new Rectangle(5, 0, Color.blue, 50, 10, "rect B");
-
-    Oval ovalA1 = new Oval(5, 1, Color.red, 20, 30, "oval A");
-    Oval ovalA2 = new Oval(5, 2, Color.GREEN, 20, 30, "oval A");
-    Oval ovalA3 = new Oval(5, 3, Color.red, 20, 30, "oval A");
 
     // Motions for rectangle A
-    this.m1 = new Motion(rectA, rectA1, 0, 5);
-    this.m1_o1 = new Motion(rectA, new Rectangle(6, 0, Color.red, 20, 30, "rect A"), 0, 5);
-    this.m1_o11 = new Motion(rectA, new Rectangle(5, 0, Color.green, 20, 30, "rect A"), 0, 5);
+    this.m1 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
+        5, 10, 1, 0, 0, 255, 50, 10);
+    this.m1_o1 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
+        5, 6, 0, 255, 0, 0, 20, 30);
+    this.m1_o11 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
+        5, 5, 0, 0, 255, 0, 20, 30);
 
-    this.m1_o2 = new Motion(rectA, new Rectangle(5, 1, Color.red, 20, 30, "rect A"), 0, 5);
-    this.m1_o3 = new Motion(rectA, new Rectangle(5, 0, Color.red, 20, 31, "rect A"), 0, 5);
-    this.m1_o4 = new Motion(rectA, new Rectangle(5, 0, Color.red, 21, 30, "rect A"), 0, 5);
-    this.m1_o5 = new Motion(rectA, new Rectangle(5, 0, Color.green, 20, 31, "rect A"), 0, 5);
-    this.m1_o6 = new Motion(rectA, new Rectangle(6, 0, Color.red, 20, 30, "rect A"), 1, 4);
-    this.m1_o7 = new Motion(rectA, new Rectangle(6, 0, Color.red, 20, 30, "rect A"), 1, 6);
+    this.m1_o2 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
+        5, 5, 1, 255, 0, 0, 20, 30);
 
-    this.m3 = new Motion(rectA1, rectA3, 5, 10);
-    this.m3_o = new Motion(rectA1, rectA3, 4, 9);
-    this.m2 = new Motion(rectA3, rectA2, 12, 20);
+    this.m1_o3 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
+        5, 5, 0, 255, 0, 0, 20, 31);
+    this.m1_o4 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
+        5, 5, 0, 255, 0, 0, 21, 30);
+    this.m1_o5 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
+        5, 5, 0, 0, 255, 0, 20, 31);
+    this.m1_o6 = new Motion(1, 5, 0, 255, 0, 0, 20, 30,
+        4, 6, 0, 255, 0, 0, 20, 30);
+    this.m1_o7 = new Motion(1, 5, 0, 255, 0, 0, 20, 30,
+        6, 6, 0, 255, 0, 0, 20, 30);
 
-    this.m2_1 = new Motion(rectA3, rectA2, 13, 14);
-    this.m2_2 = new Motion(rectA3, rectA2, 13, 22);
-    this.m2_3 = new Motion(rectA3, rectA2, 11, 15);
-    this.m2_4 = new Motion(rectA, rectA2, 12, 20);
+    this.m3 = new Motion(5, 6, 1, 0, 255, 0, 23, 33,
+        10, 5, 3, 255, 0, 0, 20, 30);
+    this.m3_o = new Motion(4, 6, 1, 0, 255, 0, 23, 33,
+        9, 5, 3, 255, 0, 0, 20, 30);
+    this.m2 = new Motion(12, 5, 0, 255, 0, 0, 20, 30,
+        20, 5, 2, 255, 0, 0, 20, 30);
 
-    // Motions for Oval B
-    this.m4 = new Motion(ovalA, ovalA1, 5, 10);
+    Motion m2_1 = new Motion(13, 5, 3, 255, 0, 0, 20, 30,
+        14, 5, 2, 255, 0, 0, 20, 30);
+    Motion m2_2 = new Motion(13, 5, 3, 255, 0, 0, 20, 30,
+        22, 5, 2, 255, 0, 0, 20, 30);
+    Motion m2_3 = new Motion(11, 5, 3, 255, 0, 0, 20, 30,
+        15, 5, 2, 255, 0, 0, 20, 30);
+    Motion m2_4 = new Motion(20, 5, 0, 255, 0, 0, 20, 30,
+        30, 5, 2, 255, 0, 0, 20, 30);
 
-    this.m5 = new Motion(ovalA1, ovalA2, 10, 20);
+    // Motions for cs3500.animator.model.Oval B
+    // Motions for cs3500.animator.model.Oval B
+    Motion m4 = new Motion(5, 5, 0, 255, 0, 0, 20, 30,
+        10, 5, 1, 255, 0, 0, 20, 30);
 
-    this.m6 = new Motion(ovalA2, ovalA3, 20, 30);
+    this.m5 = new Motion(10, 5, 1, 255, 0, 0, 20, 30,
+        20, 5, 2, 0, 255, 0, 20, 30);
 
-    this.m7 = new Motion(rectB, rectB1, 5, 15);
+    Motion m6 = new Motion(20, 5, 2, 0, 255, 0, 20, 30,
+        30, 5, 3, 255, 0, 0, 20, 30);
+
+    this.m7 = new Motion(5, 10, 0, 0, 0, 255, 50, 10,
+        15, 5, 0, 255, 0, 0, 20, 30);
+
+    this.changingColorMotion = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
+        10, 5, 0, 0, 0, 255, 20, 30);
+
+    this.changingPositionMotion = new Motion(5, 5, 0, 255, 0, 0, 20, 30,
+        15, 5, 10, 255, 0, 0, 20, 30);
+
+    motionsRectA = new ArrayList(Arrays.asList(
+        m1, m1_o1, m1_o11, m1_o2, m1_o3, m1_o4, m1_o5, m1_o6, m1_o7, m2_4));
+    motionsRectB = new ArrayList(Arrays.asList(m7));
+    motionsOvalA = new ArrayList(Arrays.asList(m4));
+    List<Motion> motionsRectA1 = new ArrayList(Arrays.asList(m4, m5, m6));
+    List<Motion> motionsRectA2 = new ArrayList(Arrays.asList(m6));
+    List<Motion> motionsRectA3 = new ArrayList(Arrays.asList(m2, m2_1));
+    List<Motion> motionsOvalA1 = new ArrayList(Arrays.asList(m4, m5, m6));
+    List<Motion> motionsOvalA2 = new ArrayList(Arrays.asList(m6));
+    List<Motion> motionsChangingColor = new ArrayList(Arrays.asList(changingColorMotion));
+    List<Motion> motionsChangingPosition = new ArrayList(Arrays.asList(changingPositionMotion));
+    List<Motion> emptyMotions = new ArrayList<>();
 
     // Overlaps but changing different fields
 
-    this.changingColorStart = new Rectangle(5, 0, Color.red, 20, 30, "rect A");
-    this.changingColorEnd = new Rectangle(5, 0, Color.blue, 20, 30, "rect A");
+    Rectangle changingColorStart = new Rectangle("rect Color", motionsChangingColor);
 
-    this.changingPositionStart = new Rectangle(5, 0, Color.red, 20, 30, "rect A");
-    this.changingPositionEnd = new Rectangle(5, 10, Color.red, 20, 30, "rect A");
+    Rectangle changingPositionStart = new Rectangle("rect Position", motionsChangingPosition);
 
-    this.changingColorMotion = new Motion(changingColorStart, changingColorEnd, 0, 10);
-    this.changingPositionMotion = new Motion(changingPositionStart, changingPositionEnd, 5, 15);
-  }
+    this.rectA = new Rectangle("rect A", motionsRectA);
+    this.rectB = new Rectangle("rect B", motionsRectB);
+    Oval ovalA = new Oval("oval A", motionsOvalA);
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testEmptyMotions() {
-    new ShapeAnimation(new ArrayList<>());
-  }
+    Rectangle rectA1 = new Rectangle("rect A1", motionsRectA1);
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testMotionOverlapAllWithin() {
-    new ShapeAnimation(new ArrayList<>(Arrays.asList(this.m2, this.m2_1)));
-  }
+    Rectangle rectA2 = new Rectangle("rect A2", motionsRectA2);
+    Rectangle rectA3 = new Rectangle("rect A3", motionsRectA3);
+    Rectangle rectA3_1 = new Rectangle("rect A3_1", new ArrayList(Arrays.asList(m2, m2_2)));
+    Rectangle rectA3_2 = new Rectangle("rect A3_2", new ArrayList(Arrays.asList(m2, m2_3)));
+    Rectangle rectA3_3 = new Rectangle("rect A3_2", new ArrayList(Arrays.asList(m2, m2_4)));
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testMotionOverlapStartingWithin() {
-    new ShapeAnimation(new ArrayList<>(Arrays.asList(this.m2, this.m2_2)));
-  }
+    Rectangle rectB1 = new Rectangle("rect B1", emptyMotions);
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testMotionOverlapEndingWithin() {
-    new ShapeAnimation(new ArrayList<>(Arrays.asList(this.m2, this.m2_3)));
-  }
+    Oval ovalA1 = new Oval("oval A1", motionsOvalA1);
+    Oval ovalA2 = new Oval("oval A2", motionsOvalA2);
+    Oval ovalA3 = new Oval("oval A3", emptyMotions);
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testMotionInconsistentWithLast() {
-    new ShapeAnimation(new ArrayList<>(Arrays.asList(this.m2, this.m2_4)));
-  }
-
-  @Test
-  public void testGetTextDescription() {
-    // Sorted
-    ShapeAnimation s1 =
-        new ShapeAnimation(
-            new ArrayList<>(Arrays.asList(this.m1, this.m3, this.m2, this.m4, this.m5, this.m6)));
-    // Unsorted
-    ShapeAnimation s2 = new ShapeAnimation(
-        new ArrayList<>(Arrays.asList(this.m2, this.m6, this.m5, this.m1, this.m3, this.m4)));
-
-    // With overlap of different shapes (same fields changing during same ticks)
-    ShapeAnimation s3 = new ShapeAnimation(
-        new ArrayList<>(Arrays.asList(this.m3, this.m4, this.m7)));
-
-    // Same shape changing multiple fields during same tick frame
-    ShapeAnimation s4 = new ShapeAnimation(
-        new ArrayList<>(Arrays.asList(this.m1)));
-
-    assertEquals("shape rect A Rectangle\n"
-        + "motion rect A 0 5 0 30 20 255 0 0   5 6 1 33 23 0 255 0\n"
-        + "motion rect A 5 6 1 33 23 0 255 0   10 5 3 30 20 255 0 0\n"
-        + "motion rect A 12 5 3 30 20 255 0 0   20 5 2 30 20 255 0 0\n"
-        + "\n"
-        + "shape oval A Oval\n"
-        + "motion oval A 5 5 0 30 20 255 0 0   10 5 1 30 20 255 0 0\n"
-        + "motion oval A 10 5 1 30 20 255 0 0   20 5 2 30 20 0 255 0\n"
-        + "motion oval A 20 5 2 30 20 0 255 0   30 5 3 30 20 255 0 0", s1.getTextDescription());
-
-    assertEquals("shape rect A Rectangle\n"
-        + "motion rect A 0 5 0 30 20 255 0 0   5 6 1 33 23 0 255 0\n"
-        + "motion rect A 5 6 1 33 23 0 255 0   10 5 3 30 20 255 0 0\n"
-        + "motion rect A 12 5 3 30 20 255 0 0   20 5 2 30 20 255 0 0\n"
-        + "\n"
-        + "shape oval A Oval\n"
-        + "motion oval A 5 5 0 30 20 255 0 0   10 5 1 30 20 255 0 0\n"
-        + "motion oval A 10 5 1 30 20 255 0 0   20 5 2 30 20 0 255 0\n"
-        + "motion oval A 20 5 2 30 20 0 255 0   30 5 3 30 20 255 0 0", s2.getTextDescription());
-
-    assertEquals("shape rect A Rectangle\n"
-        + "motion rect A 5 6 1 33 23 0 255 0   10 5 3 30 20 255 0 0\n"
-        + "\n"
-        + "shape oval A Oval\n"
-        + "motion oval A 5 5 0 30 20 255 0 0   10 5 1 30 20 255 0 0\n"
-        + "\n"
-        + "shape rect B Rectangle\n"
-        + "motion rect B 5 10 0 10 50 0 0 255   15 5 0 10 50 0 0 255", s3.getTextDescription());
-
-    assertEquals("shape rect A Rectangle\n"
-        + "motion rect A 0 5 0 30 20 255 0 0   5 6 1 33 23 0 255 0", s4.getTextDescription());
 
   }
 
   // Tests for motion
 
-  @Test(expected = NullPointerException.class)
-  public void testInvalidMotionNullStart() {
-    new Motion(null, rectB1, 5, 15);
+  @Test(expected = IllegalArgumentException.class)
+  public void testNegativeStart() {
+    new Motion(-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
   }
 
-  @Test(expected = NullPointerException.class)
-  public void testInvalidMotionNullEnd() {
-    new Motion(rectA, null, 5, 15);
+  //
+  @Test(expected = IllegalArgumentException.class)
+  public void testNegativeEnd() {
+    new Motion(-10, 2, 3, 4, 5, 6, 7, 8, -9, 10, 11, 12, 13, 14, 15, 16);
+  }
+
+  //
+  @Test(expected = IllegalArgumentException.class)
+  public void testInvalidMotionEndTickLessThanStart() {
+    new Motion(10, 2, 3, 4, 5, 6, 7, 8, 5, 10, 11, 12, 13, 14, 15, 16);
+
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testInvalidMotionEndTickLessThanStart() {
-    new Motion(rectA, rectB1, 15, 5);
+  public void testBadColorV1() {
+    new Motion(0, 2, 3, 256, 5, 6, 7, 8,
+        5, 10, 11, 12, 13, 14, 15, 16);
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void testBadColorV2() {
+    new Motion(0, 2, 3, 0, -200, 6, 7, 8,
+        5, 10, 11, 12, 13, 14, 15, 16);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testNegativeWidth() {
+    new Motion(0, 2, 3, 0, 5, 6, 7, 8,
+        5, 10, 11, 12, 13, 14, 15, -20);
+
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testNegativeHeight() {
+    new Motion(0, 2, 3, 0, 5, 6, -90, 8,
+        5, 10, 11, 12, 13, 14, 15, 16);
+
+  }
+
+
+  // Tests for text description
   @Test
   public void testGenerateDescription() {
-    assertEquals("motion rect A 0 5 0 30 20 255 0 0   5 6 1 33 23 0 255 0",
+    assertEquals("0 5 0 30 20 255 0 0 5 10 1 10 50 0 0 255",
         this.m1.generateDescription());
-    assertEquals("motion rect B 5 10 0 10 50 0 0 255   15 5 0 10 50 0 0 255",
+    assertEquals("5 10 0 10 50 0 0 255 15 5 0 30 20 255 0 0",
         this.m7.generateDescription());
-    assertEquals("motion oval A 10 5 1 30 20 255 0 0   20 5 2 30 20 0 255 0",
+    assertEquals("10 5 1 30 20 255 0 0 20 5 2 30 20 0 255 0",
         this.m5.generateDescription());
 
   }
@@ -255,15 +241,11 @@ public class ModelTest {
     assertFalse(this.changingColorMotion.overlaps(changingPositionMotion));
   }
 
-  @Test
-  public void testGetStartingShape() {
-    assertEquals(this.rectA, this.m1.getStartingShape());
+  @Test(expected = IllegalArgumentException.class)
+  public void testNullOverlap() {
+    this.m2.overlaps(null);
   }
 
-  @Test
-  public void testGetEndingState() {
-    assertEquals(this.rectA1, this.m1.getEndingState());
-  }
 
   @Test
   public void testGetStartingTick() {
@@ -276,156 +258,151 @@ public class ModelTest {
     assertEquals(5, this.m1.getEndingTick());
   }
 
-  // Tests for shape
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testInvalidShapeNegativeWidth() {
-    new Rectangle(1, 1, Color.red, 1, -1, "A");
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testInvalidShapeNegativeHeight() {
-    new Rectangle(1, 1, Color.red, -1, 1, "A");
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testInvalidShapeNegativeBoth() {
-    new Rectangle(1, 1, Color.red, -1, -1, "A");
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void testInvalidShapeNullName() {
-    new Rectangle(1, 1, Color.red, 1, 1, null);
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void testInvalidShapeNullColor() {
-    new Rectangle(1, 1, null, 1, 1, "A");
+  @Test
+  public void testGetStartingX() {
+    assertEquals(5, this.m1.getStartX());
   }
 
   @Test
-  public void testMove() {
-    assertEquals(5, this.rectA.getX());
-    assertEquals(0, this.rectA.getY());
-    this.rectA.move(60, 70);
-    assertEquals(60, this.rectA.getX());
-    assertEquals(70, this.rectA.getY());
-
-    assertEquals(5, this.ovalA.getX());
-    assertEquals(0, this.ovalA.getY());
-    this.ovalA.move(-5, -8);
-    assertEquals(-5, this.ovalA.getX());
-    assertEquals(-8, this.ovalA.getY());
+  public void testGetStartingY() {
+    assertEquals(0, this.m1.getStartY());
   }
 
   @Test
-  public void testResize() {
-    assertEquals(30, this.rectA.getWidth());
-    assertEquals(20, this.rectA.getHeight());
-    this.rectA.resize(60, 40);
-    assertEquals(60, this.rectA.getWidth());
-    assertEquals(40, this.rectA.getHeight());
-
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testNegativeResize() {
-    this.rectA.resize(-2, -5);
+  public void testGetStartingR() {
+    assertEquals(255, this.m1.getStartR());
   }
 
   @Test
-  public void testChangeColor() {
-    assertEquals(Color.red, rectA.getColor());
-    this.rectA.changeColor(0, 0, 255);
-    assertEquals(Color.blue, rectA.getColor());
+  public void testGetStartingG() {
+    assertEquals(0, this.m1.getStartG());
+  }
+
+  @Test
+  public void testGetStartingB() {
+    assertEquals(0, this.m1.getStartB());
+  }
+
+  @Test
+  public void testGetStartingWidth() {
+    assertEquals(30, this.m1.getStartWidth());
+  }
+
+  @Test
+  public void testGetStartingHeight() {
+    assertEquals(20, this.m1.getStartHeight());
+  }
+
+
+  @Test
+  public void testGetEndingX() {
+    assertEquals(10, this.m1.getEndX());
+  }
+
+  @Test
+  public void testGetEndingY() {
+    assertEquals(1, this.m1.getEndY());
+  }
+
+  @Test
+  public void testGetEndingR() {
+    assertEquals(0, this.m1.getEndR());
+  }
+
+  @Test
+  public void testGetEndingG() {
+    assertEquals(0, this.m1.getEndG());
+  }
+
+  @Test
+  public void testGetEndingB() {
+    assertEquals(255, this.m1.getEndB());
+  }
+
+  @Test
+  public void testGetEndingWidth() {
+    assertEquals(10, this.m1.getEndWidth());
+  }
+
+  @Test
+  public void testGetEndingHeight() {
+    assertEquals(50, this.m1.getEndHeight());
+  }
+
+
+  @Test
+  public void testIsConsistent() {
+    Motion motion1 = new Motion(0, 5, 0, 255, 0, 0, 20, 30,
+
+        5, 10, 1, 0, 0, 255, 50, 10);
+
+    Motion motion2 = new Motion(5, 10, 1, 0, 0, 255, 50, 10,
+        10, 20, 1, 0, 0, 255, 50, 10);
+
+    Motion motion3 = new Motion(10, 25, 1, 0, 0, 255, 50, 10,
+        20, 20, 1, 0, 0, 255, 50, 10);
+
+    assertTrue(motion1.isConsistent(motion2));
+    assertFalse(motion2.isConsistent(motion3));
+  }
+
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testIsConsistentNull() {
+    this.m1.isConsistent(null);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testBadColorChange() {
-    this.ovalA.changeColor(-4, 50, 22);
+  public void testNullName() {
+    Shape s = new Rectangle(null, this.motionsOvalA);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testBadColorChangeV2() {
-    this.ovalA.changeColor(90, 900, 22);
+  public void testNullMotions() {
+    Shape s = new Rectangle("hello", null);
   }
 
   @Test
   public void testGetName() {
     assertEquals("rect A", this.rectA.getName());
-    assertEquals("oval A", this.ovalA.getName());
   }
 
   @Test
-  public void testGetX() {
-    assertEquals(5, this.rectA.getX());
-    assertEquals(10, this.rectB.getX());
+  public void testGetMotions() {
+    assertEquals(this.motionsRectA, this.rectA.getMotions());
   }
 
   @Test
-  public void testGetY() {
-    assertEquals(2, this.rectA2.getY());
-    assertEquals(3, this.rectA3.getY());
+  public void testAddMotion() {
+    assertEquals(this.motionsRectB, this.rectB.getMotions());
+    assertEquals(1, this.rectB.getMotions().size());
+
+    Motion addedMotion = new Motion(15, 5, 0, 255, 0, 0, 20, 30,
+        20, 5, 0, 0, 255, 0, 20, 30);
+    rectB.addMotion(addedMotion);
+
+    assertEquals(new ArrayList<Motion>(Arrays.asList(this.m7, addedMotion)),
+        this.rectB.getMotions());
+    assertEquals(2, this.rectB.getMotions().size());
   }
 
   @Test
-  public void testGetColor() {
-    assertEquals(Color.red, this.rectA.getColor());
-    assertEquals(Color.blue, this.rectB.getColor());
+  public void testRemoveMotion() {
+    assertEquals(this.motionsRectB, this.rectB.getMotions());
+    assertEquals(1, this.rectB.getMotions().size());
+
+    rectB.removeMotion(this.m7);
+
+    assertEquals(new ArrayList<Motion>(Arrays.asList()), this.rectB.getMotions());
+    assertEquals(0, this.rectB.getMotions().size());
   }
 
-  @Test
-  public void testGetWidth() {
-    assertEquals(30, this.rectA2.getWidth());
-    assertEquals(10, this.rectB1.getWidth());
-  }
-
-  @Test
-  public void testGetHeight() {
-    assertEquals(20, this.rectA2.getHeight());
-    assertEquals(50, this.rectB1.getHeight());
-  }
-
-  @Test
-  public void isSameStateTest() {
-    assertTrue(new Rectangle(1, 1, Color.red, 1, 1, "A")
-        .isSameState(new Rectangle(1, 1, Color.red, 1, 1, "B")));
-    assertFalse(new Rectangle(1, 1, Color.red, 1, 1, "A")
-        .isSameState(new Oval(1, 1, Color.red, 1, 1, "A")));
-    assertFalse(new Rectangle(1, 1, Color.red, 1, 1, "A")
-        .isSameState(new Oval(1, 1, Color.red, 1, 1, "B")));
-    assertTrue(this.rectA.isSameState(this.rectA));
-    assertFalse(this.rectA.isSameState(this.rectB));
-
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void isSameStateTestNull() {
-    this.rectB1.isSameState(null);
-  }
-
-
-  // Changing color motion occurs from time 0-10. Changing position motion occurs from time 5-15.
-  // Both motions are occuring on the same shape. However, they are ending in the same state, which
-  // should throw an exception.
   @Test(expected = IllegalArgumentException.class)
-  public void testNotEndingInSameState() {
+  public void testRemoveNonExistentMotion() {
 
-    ShapeAnimation anim = new ShapeAnimation(
-        new ArrayList<Motion>(Arrays.asList(changingColorMotion, changingPositionMotion)));
+    rectB.removeMotion(this.m1);
 
   }
 
-  // Two motions start and end at the same time changing different values on the same shape.
-  // However, they do not end in the same state, which should throw an exception.
-  @Test(expected = IllegalArgumentException.class)
-  public void testSameStartingStateSameStartingTime() {
-
-    this.changingPositionMotion = new Motion(changingPositionStart, changingPositionEnd,
-        0, 10);
-
-    ShapeAnimation anim = new ShapeAnimation(
-        new ArrayList<Motion>(Arrays.asList(changingColorMotion, changingPositionMotion)));
-  }
 
 }
