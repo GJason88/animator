@@ -1,5 +1,6 @@
 # Animator
-Animator application that allows for the creation and customization of different shapes and objects as well as their respective keyframes within the animation; and the control over the playback of the animation itself.
+Animator application that allows for the creation and customization of different shapes and objects as well as their respective keyframes within the animation; and the control over the playback of the animation itself.  
+Designed using Object-Oriented principles and the MVC model to promote SOLID principles, loose coupling, faster development, and flexibility for multiple view types.
 
 ## Installation
 Clone the repository or install the zip to your PC
